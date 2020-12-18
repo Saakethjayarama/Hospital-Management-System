@@ -58,7 +58,6 @@ function Admin() {
         handleClose={() => setShowConfirm(false)}
         confirm={deleteDoctor}
       />
-
       <div className="Admin">
         <h3>Admin Dashboard</h3>
         <br />

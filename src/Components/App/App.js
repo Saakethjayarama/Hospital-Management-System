@@ -4,12 +4,17 @@ import Login from "../Login";
 import Header from "../Header";
 import Admin from "../Admin";
 import Doctor from "../Doctor";
+import Patients from "../Patients";
 
 function App() {
   return (
     <div className="App">
       <Router>
         <Switch>
+          <Route exact path="/patient">
+            <Header />
+            <Patients />
+          </Route>
           <Route exact path="/doctor">
             <Header />
             <Doctor />
