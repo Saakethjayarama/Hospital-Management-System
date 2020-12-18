@@ -1,0 +1,12 @@
+.Landing {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 30;
+  bottom: 0px;
+}
+
+.content {
+  width: 40%;
+  padding-top: 50px;
+}
