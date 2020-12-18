@@ -1,0 +1,11 @@
+.Home {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.content {
+  width: 60%;
+  text-align: center;
+}

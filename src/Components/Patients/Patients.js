@@ -44,7 +44,7 @@ function Patients() {
         onHide={() => setShow(false)}
         onSubmit={bookAnAppointment}
       />
-      <h3>Patients</h3>
+      <h3>Appointments</h3>
       <div className="addIcon">
         <Fab color="secondary" aria-label="add" onClick={() => setShow(true)}>
           <AddIcon />
