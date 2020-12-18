@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Landing.css";
 import { Form, Button } from "react-bootstrap";
 
-function Landing() {
+function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -47,4 +47,4 @@ function Landing() {
   );
 }
 
-export default Landing;
+export default Login;

@@ -1,6 +1,6 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Landing from "../Landing";
+import Login from "../Login";
 import Header from "../Header";
 import Admin from "../Admin";
 
@@ -15,7 +15,7 @@ function App() {
           </Route>
           <Route exact path="/login">
             <Header />
-            <Landing />
+            <Login />
           </Route>
         </Switch>
       </Router>
