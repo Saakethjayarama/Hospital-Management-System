@@ -10,7 +10,7 @@ function About() {
           Our Mission is to bring healthcare of International standards within
           the reach of every individual. We are committed to the achievement and
           maintenance of excellence in education, research and healthcare for
-          the benefit of humanity
+          the benefit of humanity.
         </p>
       </div>
     </div>
