@@ -10,34 +10,52 @@ import ConfirmModal from "./ConfirmModal";
 function Admin() {
   const [doctors, setDoctors] = useState([]);
 
+  const [reload, setReload] = useState(null);
   useEffect(() => {
-    setDoctors([
-      {
-        id: 1,
-        name: "Saaketh",
-        email: "saakethaj@gmail.com",
-        phoneNumber: "9663971485",
-      },
-      {
-        id: 2,
-        name: "Manohar",
-        email: "manoharkn@gmail.com",
-        phoneNumber: "8575984875",
-      },
-    ]);
-  }, []);
+    fetch("http://localhost/users/byType.php?type=2")
+      .then((res) => res.json())
+      .then((data) => {
+        const docs = [];
+        data.forEach((doctor) => {
+          const { id, name, email, phoneNumber } = doctor;
+          docs.push({
+            id,
+            name,
+            email,
+            phoneNumber,
+          });
+        });
+        setDoctors(docs);
+      });
+  }, [reload]);
 
   // Handle Doctor Modal
   const [show, setShow] = useState(false);
   const addDoctorHandleSubmit = (data) => {
-    console.log(data);
+    const { name, email, password, phoneNumber } = data;
+    fetch("http://localhost/users/add.php", {
+      method: "POST",
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+        phoneNumber,
+        userType: 2,
+      }),
+    }).then(() => {
+      setReload(Math.random());
+    });
     setShow(false);
   };
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [current, setCurrent] = useState(null);
   const deleteDoctor = () => {
-    console.log(current);
+    fetch(`http://localhost/users/delete.php?id=${current}`, {
+      method: "DELETE",
+    }).then(() => {
+      setReload(Math.random());
+    });
     setShowConfirm(false);
   };
 

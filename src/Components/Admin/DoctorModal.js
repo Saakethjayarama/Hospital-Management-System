@@ -19,6 +19,14 @@ function DoctorModal(props) {
     });
   };
 
+  const disabled =
+    state.name === "" ||
+    state.email === "" ||
+    state.phoneNumber === "" ||
+    state.password === "" ||
+    state.confirmPassword === "" ||
+    state.password !== state.confirmPassword;
+
   return (
     <Modal
       {...props}
@@ -92,10 +100,18 @@ function DoctorModal(props) {
             props.onSubmit(state);
             setState(INITIAL_STATE);
           }}
+          disabled={disabled}
         >
           Submit
         </Button>
-        <Button onClick={props.onHide}>Close</Button>
+        <Button
+          onClick={() => {
+            setState(INITIAL_STATE);
+            props.onHide();
+          }}
+        >
+          Close
+        </Button>
       </Modal.Footer>
     </Modal>
   );
