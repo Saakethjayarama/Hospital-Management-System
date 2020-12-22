@@ -11,7 +11,7 @@ function DoctorModal(props) {
 
   const [doctors, setDoctors] = useState([]);
   useEffect(() => {
-    fetch("http://localhost/users/byType.php?type=1")
+    fetch("http://localhost/users/byType.php?type=2")
       .then((res) => res.json())
       .then((data) => {
         const docs = [];
