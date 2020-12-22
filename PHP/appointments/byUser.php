@@ -25,12 +25,12 @@
         if(isset($_GET['id'])){
 
          
-          $appointments = $adi->getAppointmentsByDoctorIdOfCurrentDay($_GET['id']);
+          $appointments = $adi->getAppointmentsByUserId($_GET['id']);
 
           $appointmentsList = [];
           foreach($appointments as $appointment) {
             
-            $userId = $appointment->getPatientId();
+            $userId = $appointment->getDoctorId();
             $user =$udi->getUserById($userId);
             $appointment = $appointment->toArray();
             $appointment["name"] = $user->getName();

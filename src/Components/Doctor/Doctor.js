@@ -10,18 +10,21 @@ function Doctor() {
   const [patients, setPatients] = useState([]);
 
   useEffect(() => {
-    setPatients([
-      {
-        id: 1,
-        name: "Saaketh",
-        phoneNumber: "9663971485",
-      },
-      {
-        id: 2,
-        name: "Manohar",
-        phoneNumber: "8547859856",
-      },
-    ]);
+    fetch("http://localhost/appointments/appointments.php?id=1")
+      .then((res) => res.json())
+      .then((data) => {
+        const patientsList = [];
+
+        data.forEach((value) => {
+          const { id, name, phoneNumber } = value;
+          patientsList.push({
+            id,
+            name,
+            phoneNumber,
+          });
+        });
+        setPatients(patientsList);
+      });
   }, []);
 
   const call = (phoneNumber) => {

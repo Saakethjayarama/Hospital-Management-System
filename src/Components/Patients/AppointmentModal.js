@@ -9,21 +9,20 @@ function DoctorModal(props) {
 
   const [state, setState] = useState(INITIAL_STATE);
 
-  const handleChange = (event) => {
-    setState({
-      ...state,
-      [event.target.name]: event.target.value,
-    });
-  };
-
   const [doctors, setDoctors] = useState([]);
   useEffect(() => {
     fetch("http://localhost/users/byType.php?type=2")
       .then((res) => res.json())
       .then((data) => {
         const docs = [];
-        data.forEach((doctor) => {
+        data.forEach((doctor, index) => {
           const { id, name } = doctor;
+          if (index === 0) {
+            setState({
+              ...state,
+              doctorId: id,
+            });
+          }
           docs.push({
             id,
             name,
@@ -32,7 +31,6 @@ function DoctorModal(props) {
         setDoctors(docs);
       });
   }, []);
-
   return (
     <Modal
       {...props}
@@ -52,7 +50,12 @@ function DoctorModal(props) {
             <Form.Control
               type="date"
               value={state.date}
-              onChange={handleChange}
+              onChange={(event) => {
+                setState({
+                  ...state,
+                  date: event.target.value,
+                });
+              }}
               name="date"
             />
           </Form.Group>
@@ -61,7 +64,12 @@ function DoctorModal(props) {
             <Form.Control
               as="select"
               name="doctorId"
-              onChange={handleChange}
+              onChange={(event) => {
+                setState({
+                  ...state,
+                  doctorId: event.target.value,
+                });
+              }}
               value={state.doctorId}
             >
               {doctors.map((value, index) => {
@@ -80,14 +88,12 @@ function DoctorModal(props) {
           variant="primary"
           onClick={() => {
             props.onSubmit(state);
-            setState(INITIAL_STATE);
           }}
         >
           Submit
         </Button>
         <Button
           onClick={() => {
-            setState(INITIAL_STATE);
             props.onHide();
           }}
         >

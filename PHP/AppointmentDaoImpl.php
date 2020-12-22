@@ -44,7 +44,7 @@
 
     function getAppointmentsByUserId($userId) {
       $connection = JdbcUtil::getConnection();
-      $sql = 'select * from appointments where user_id = ?';
+      $sql = 'SELECT * from appointments WHERE patient_id = ?';
 
       $statement = $connection->prepare($sql);
       $statement->bind_param('i', $userId);

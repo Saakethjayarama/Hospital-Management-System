@@ -37,16 +37,16 @@
       $statement = $connection->prepare($sql);
       $statement->bind_param('i', $id);
 
-      $users = [];
+      $user = null;
       if($statement->execute()) {
         $statement->bind_result($id, $name, $email, $phoneNumber, $password, $userType);
         while($statement->fetch()) {
-          $users[] = new User($id, $name, $email, $phoneNumber, $password, $userType);
+          $user = new User($id, $name, $email, $phoneNumber, $password, $userType);
         }
       }
       
       $connection->close();
-      return $users;
+      return $user;
     }
 
     function verify($username, $password) {

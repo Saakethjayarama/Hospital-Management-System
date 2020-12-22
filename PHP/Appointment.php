@@ -59,7 +59,8 @@
         "id" => $this->id,
         "doctorId" => $this->doctorId,
         "patientId" => $this->patientId,
-        "appointmentDate" => $this->appointmentDate
+        "appointmentDate" => $this->appointmentDate,
+        "status" => $this->status
       );
     }
 

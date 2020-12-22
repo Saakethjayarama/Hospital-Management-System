@@ -8,33 +8,47 @@ import AppointmentModal from "./AppointmentModal";
 
 function Patients() {
   const [appointments, setAppointements] = useState([]);
+  const [trigger, setTrigger] = useState();
 
   useEffect(() => {
-    setAppointements([
-      {
-        id: 1,
-        date: "12/08/2000",
-        doctorId: 2,
-        status: 1,
-      },
-      {
-        id: 2,
-        date: "28/08/2020",
-        doctorId: 4,
-        status: 2,
-      },
-      {
-        id: 2,
-        date: "28/08/2020",
-        doctorId: 4,
-        status: 3,
-      },
-    ]);
-  }, []);
+    fetch(`http://localhost/appointments/byUser.php?id=7`)
+      .then((res) => res.json())
+      .then((data) => {
+        const apps = [];
+        data.forEach((val, index) => {
+          let { id, appointmentDate, name, status } = val;
+          appointmentDate = appointmentDate.split("-").reverse().join("-");
+          apps.push({
+            id,
+            date: appointmentDate,
+            doctorName: name,
+            status,
+          });
+        });
+        setAppointements(apps);
+      });
+  }, [trigger]);
 
   const [show, setShow] = useState(false);
   const bookAnAppointment = (data) => {
-    console.log(data);
+    const { doctorId, date } = data;
+
+    if (date && doctorId) {
+      const patientId = 7;
+
+      fetch("http://localhost/appointments/add.php", {
+        method: "POST",
+        body: JSON.stringify({
+          doctorId,
+          appointmentDate: date,
+          patientId,
+        }),
+      }).then(() => {
+        setTrigger(Math.random());
+      });
+    }
+
+    setShow(false);
   };
 
   return (
@@ -67,7 +81,7 @@ function Patients() {
                 <td>{index + 1}</td>
                 <td>{value.id}</td>
                 <td>{value.date}</td>
-                <td>{value.doctorId}</td>
+                <td>{value.doctorName}</td>
                 <td>{getStatus(value.status)}</td>
               </tr>
             );
@@ -80,9 +94,9 @@ function Patients() {
 
 const getStatus = (status) => {
   switch (status) {
-    case 1:
-      return <Alert variant={"success"}>Got Checked.</Alert>;
     case 2:
+      return <Alert variant={"success"}>Got Checked.</Alert>;
+    case 1:
       return <Alert variant={"warning"}>Upcoming.</Alert>;
     case 3:
       return <Alert variant={"danger"}>Missed Appointment.</Alert>;

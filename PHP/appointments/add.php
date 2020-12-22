@@ -18,7 +18,7 @@
       
       $adi = new AppointmentDaoImpl();
       
-      $appointment = new Appointment(null, $data['doctorId'], $data['patientId'], $data['appointmentDate'], 0);
+      $appointment = new Appointment(null, $data['doctorId'], $data['patientId'], $data['appointmentDate'], 1);
       $id = $adi->addAppointment($appointment);
       $appointment->setId($id);
       
