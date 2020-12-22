@@ -1,0 +1,92 @@
+<?php
+  include_once 'Appointment.php';
+  include_once 'ApppointmentDao.php';
+  include_once 'AppointmentDaoImpl.php';
+  include_once 'JdbcUtil.php';
+
+  class AppointmentDaoImpl implements AppointmentDao {
+    function addAppointment($appointment) {
+      $connection = JdbcUtil::getConnection();
+
+      $doctorId = $appointment->getDoctorId();
+      $patientId = $appointment->getPatientId();
+      $appointmentDate = $appointment->getAppointmentDate();
+
+      $sql = 'insert into appointments(doctor_id, patient_id, appointment_date) values (?, ?, ?)';
+
+
+      $statement = $connection->prepare($sql);
+      $statement->bind_param('iis', $doctorId, $patientId, $appointmentDate);
+
+      $n = null;
+      if($statement->execute()) {
+        $n = $connection->insert_id;
+      }
+
+      $connection->close();
+      return $n;
+
+    }
+    function changeStatus($id, $status) {
+      $connection = JdbcUtil::getConnection();
+      $sql = 'update appointments set status = ? where id = ?';
+
+      $statement = $connection->prepare($sql);
+      $statement->bind_param(
+        'ii', $status, $id
+      );
+
+      $statement->execute();
+      $connection->close();
+
+    }
+
+    function getAppointmentsByUserId($userId) {
+      $connection = JdbcUtil::getConnection();
+      $sql = 'select * from appointments where user_id = ?';
+
+      $statement = $connection->prepare($sql);
+      $statement->bind_param('i', $userId);
+
+      $appointments = [];
+
+      if($statement->execute()) {
+        $statement->bind_result($id, $doctorId, $patientId, $appointmentDate, $status);
+        while($statement->fetch()) {
+          $appointments[] = new Appointment($id, $doctorId, $patientId, $appointmentDate, $status);
+        }
+      }
+
+      $connection->close();
+      return $appointments;
+
+    }
+    function getAppointmentsByDoctorIdOfCurrentDay($doctorId) {
+      $connection = JdbcUtil::getConnection();
+
+      $today = new DateTime();
+      $start =  $today->format('Y-m-d').'00:00:00';
+      $end =  $today->format('Y-m-d').'23:59:59';
+
+
+      $sql = 'select * from appointments where appointment_date BETWEEN ? and ? and doctor_id = ?';
+
+      $statement = $connection->prepare($sql);
+      $statement->bind_param('ssi', $start, $end, $doctorId);
+
+      $appointments = [];
+
+      if($statement->execute()) {
+        $statement->bind_result($id, $doctorId, $patientId, $appointmentDate, $status);
+        while($statement->fetch()) {
+          $appointments[] = new Appointment($id, $doctorId, $patientId, $appointmentDate, $status);
+        }
+      }
+
+      $connection->close();
+      return $appointments;
+
+    }
+  }
+
+?>

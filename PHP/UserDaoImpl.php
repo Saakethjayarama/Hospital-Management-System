@@ -45,7 +45,7 @@
         }
       }
       
-
+      $connection->close();
       return $users;
     }
 
@@ -66,6 +66,7 @@
         }
       }
 
+      $connection->close();
       return $user;
     }
 
@@ -84,6 +85,7 @@
         }
       }
       
+      $connection->close();
       return $users;
 
     }
@@ -95,6 +97,8 @@
       $statement = $connection->prepare($sql);
       $statement->bind_param('i', $id);
       $statement->execute();
+
+      $connection->close();
     }
     
   }

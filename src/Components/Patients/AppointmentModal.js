@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
 function DoctorModal(props) {
@@ -15,6 +15,23 @@ function DoctorModal(props) {
       [event.target.name]: event.target.value,
     });
   };
+
+  const [doctors, setDoctors] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost/users/byType.php?type=2")
+      .then((res) => res.json())
+      .then((data) => {
+        const docs = [];
+        data.forEach((doctor) => {
+          const { id, name } = doctor;
+          docs.push({
+            id,
+            name,
+          });
+        });
+        setDoctors(docs);
+      });
+  }, []);
 
   return (
     <Modal
@@ -47,8 +64,13 @@ function DoctorModal(props) {
               onChange={handleChange}
               value={state.doctorId}
             >
-              <option value={1}>Dr. Saaketh</option>
-              <option value={2}>Dr. Manohar</option>
+              {doctors.map((value, index) => {
+                return (
+                  <option value={value.id} key={index}>
+                    {value.name}
+                  </option>
+                );
+              })}
             </Form.Control>
           </Form.Group>
         </Form>
