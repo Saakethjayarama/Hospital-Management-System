@@ -8,6 +8,7 @@ import ConfirmModal from "./ConfirmModal";
 
 function Doctor() {
   const [patients, setPatients] = useState([]);
+  const [trigger, setTrigger] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost/appointments/appointments.php?id=1")
@@ -25,7 +26,7 @@ function Doctor() {
         });
         setPatients(patientsList);
       });
-  }, []);
+  }, [trigger]);
 
   const call = (phoneNumber) => {
     window.location.href = `tel:${phoneNumber}`;
@@ -34,12 +35,31 @@ function Doctor() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [current, setCurrent] = useState(null);
   const deleteAppointment = () => {
-    console.log(current);
+    const id = current;
+
+    fetch("http://localhost/appointments/status.php", {
+      method: "PUT",
+      body: JSON.stringify({
+        id,
+        status: 3,
+      }),
+    }).then(() => {
+      setTrigger(Math.random());
+    });
+
     setShowConfirm(false);
   };
 
   const done = (id) => {
-    console.log(id);
+    fetch("http://localhost/appointments/status.php", {
+      method: "PUT",
+      body: JSON.stringify({
+        id,
+        status: 2,
+      }),
+    }).then(() => {
+      setTrigger(Math.random());
+    });
   };
 
   return (

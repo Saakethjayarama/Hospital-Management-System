@@ -70,10 +70,10 @@
       $end =  $today->format('Y-m-d').':23:59:59';
 
 
-      $sql = 'select * from appointments where doctor_id = ?';
+      $sql = 'select * from appointments where appointment_date between ? and ? and doctor_id = ? and status = 1';
 
       $statement = $connection->prepare($sql);
-      $statement->bind_param('i', $doctorId);
+      $statement->bind_param('ssi',$start, $end, $doctorId);
 
       $appointments = [];
 
