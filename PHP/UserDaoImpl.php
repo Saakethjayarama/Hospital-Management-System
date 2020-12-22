@@ -3,6 +3,7 @@
   include_once 'User.php';
   include_once 'UserDao.php';
   include_once 'JdbcUtil.php';
+  include_once 'InvalidCredentialsException.php';
 
   class UserDaoImpl implements UserDao {
     function addUser($user) {
@@ -28,7 +29,46 @@
       $connection->close();
       return $n;
     }
-    
+
+    function getUserById($id) {
+      $connection = JdbcUtil::getConnection();
+
+      $sql = 'select * from users where id = ?';
+      $statement = $connection->prepare($sql);
+      $statement->bind_param('i', $id);
+
+      $users = [];
+      if($statement->execute()) {
+        $statement->bind_result($id, $name, $email, $phoneNumber, $password, $userType);
+        while($statement->fetch()) {
+          $users[] = new User($id, $name, $email, $phoneNumber, $password, $userType);
+        }
+      }
+      
+
+      return $users;
+    }
+
+    function verify($username, $password) {
+      $connection = JdbcUtil::getConnection();
+
+      $sql = 'select * from users where email = ? AND password = ?';
+      $statement = $connection->prepare($sql);
+      $statement->bind_param('ss', $username, $password);
+
+      $user = null;
+      if($statement->execute()) {
+        $statement->bind_result($id, $name, $email, $phoneNumber, $password, $userType);
+        if($statement->fetch()) {
+          $user = new User($id, $name, $email, $phoneNumber, $password, $userType);
+        } else {
+          throw new InvalidCredentialsExeption();
+        }
+      }
+
+      return $user;
+    }
+
     function getUserByType($userType) {
       $connection = JdbcUtil::getConnection();
 
@@ -44,7 +84,6 @@
         }
       }
       
-
       return $users;
 
     }

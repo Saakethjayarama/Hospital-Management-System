@@ -65,6 +65,17 @@ class User {
   function setUserType($userType) {
     $this->userType = $userType;
   }
+
+  function toArray() {
+    return array(
+      "id" => $this->id,
+      "name" => $this->name,
+      "email" => $this->email,
+      "phoneNumber" => $this->phoneNumber,
+      "password" => $this->password,
+      "userType" => $this->userType
+    );
+  }
 }
 
 
