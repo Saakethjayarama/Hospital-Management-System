@@ -12,7 +12,7 @@ function Admin() {
 
   const [reload, setReload] = useState(null);
   useEffect(() => {
-    fetch("http://localhost/users/byType.php?type=2")
+    fetch("http://localhost/users/byType.php?type=1")
       .then((res) => res.json())
       .then((data) => {
         const docs = [];
