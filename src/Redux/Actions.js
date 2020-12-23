@@ -65,4 +65,23 @@ const init = () => {
   };
 };
 
-export { login, init };
+const logout = () => {
+  const cookies = new Map(
+    document.cookie.split("; ").map((v) => v.split("=").map(decodeURIComponent))
+  );
+
+  let payload = {};
+  cookies.forEach((value, key) => {
+    payload[key] = value;
+  });
+
+  for (const [key, value] of Object.entries(payload)) {
+    setCookie(key, value, -1);
+  }
+
+  return {
+    type: actions.LOGOUT,
+  };
+};
+
+export { login, init, logout };

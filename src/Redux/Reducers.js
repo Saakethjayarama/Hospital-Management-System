@@ -35,13 +35,20 @@ const reducer = (store = INIT_STORE, action) => {
         err: null,
       };
 
-    case actions.LOGIN_INIT: {
+    case actions.LOGIN_INIT:
       console.log("Initializing Login");
       return {
         ...store,
         isProcessing: true,
       };
-    }
+
+    case actions.LOGOUT:
+      console.log("Logging out");
+
+      return {
+        ...store,
+        user: null,
+      };
 
     default:
       return store;
