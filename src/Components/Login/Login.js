@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import "./Landing.css";
 import { Form, Button } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { login } from "../../Redux/Actions";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const dispatch = useDispatch();
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    dispatch(login(username, password));
   };
 
   return (
