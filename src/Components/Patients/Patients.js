@@ -44,37 +44,37 @@ function Patients() {
   const [trigger, setTrigger] = useState();
 
   useEffect(() => {
-    fetch(`http://localhost/appointments/byUser.php?id=7`)
-      .then((res) => res.json())
-      .then((data) => {
-        const apps = [];
-        data.forEach((val, index) => {
-          let { id, appointmentDate, name, status } = val;
-          appointmentDate = appointmentDate.split("-").reverse().join("-");
-          apps.push({
-            id,
-            date: appointmentDate,
-            doctorName: name,
-            status,
+    if (user?.id) {
+      fetch(`http://localhost/appointments/byUser.php?id=${user.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          const apps = [];
+          data.forEach((val, index) => {
+            let { id, appointmentDate, name, status } = val;
+            appointmentDate = appointmentDate.split("-").reverse().join("-");
+            apps.push({
+              id,
+              date: appointmentDate,
+              doctorName: name,
+              status,
+            });
           });
+          setAppointements(apps);
         });
-        setAppointements(apps);
-      });
-  }, [trigger]);
+    }
+  }, [trigger, user?.id]);
 
   const [show, setShow] = useState(false);
   const bookAnAppointment = (data) => {
     const { doctorId, date } = data;
 
     if (date && doctorId) {
-      const patientId = 7;
-
       fetch("http://localhost/appointments/add.php", {
         method: "POST",
         body: JSON.stringify({
           doctorId,
           appointmentDate: date,
-          patientId,
+          patientId: user.id,
         }),
       }).then(() => {
         setTrigger(Math.random());
