@@ -8,8 +8,16 @@ import Patients from "../Patients";
 import Home from "../Home";
 import Contact from "../Contact";
 import About from "../About";
+import { useEffect } from "react";
+import { init } from "../../Redux/Actions";
+import { useDispatch } from "react-redux";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(init());
+  }, []);
+
   return (
     <div className="App">
       <Router>
