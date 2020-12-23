@@ -5,8 +5,41 @@ import CheckIcon from "@material-ui/icons/Check";
 import CallIcon from "@material-ui/icons/Call";
 import HourglassFullIcon from "@material-ui/icons/HourglassFull";
 import ConfirmModal from "./ConfirmModal";
+import { useHistory } from "react-router-dom";
+import { useStore } from "react-redux";
 
 function Doctor() {
+  const store = useStore();
+  const history = useHistory();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const usr = store.getState()?.user;
+    setUser(usr);
+
+    const subscription = store.subscribe(() => {
+      const usr = store.getState()?.user;
+      setUser(usr);
+    });
+
+    return () => {
+      subscription();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      const type = user.userType;
+      if (type == 1) {
+        history.push("/admin");
+      } else if (type == 2) {
+        history.push("/doctor");
+      } else if (type == 3) {
+        history.push("/patient");
+      }
+    }
+  }, [user]);
+
   const [patients, setPatients] = useState([]);
   const [trigger, setTrigger] = useState(null);
 

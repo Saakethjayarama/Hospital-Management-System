@@ -6,8 +6,41 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import DoctorModal from "./DoctorModal";
 import ConfirmModal from "./ConfirmModal";
+import { useHistory } from "react-router-dom";
+import { useStore } from "react-redux";
 
 function Admin() {
+  const store = useStore();
+  const history = useHistory();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const usr = store.getState()?.user;
+    setUser(usr);
+
+    const subscription = store.subscribe(() => {
+      const usr = store.getState()?.user;
+      setUser(usr);
+    });
+
+    return () => {
+      subscription();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      const type = user.userType;
+      if (type == 1) {
+        history.push("/admin");
+      } else if (type == 2) {
+        history.push("/doctor");
+      } else if (type == 3) {
+        history.push("/patient");
+      }
+    }
+  }, [user]);
+
   const [doctors, setDoctors] = useState([]);
 
   const [reload, setReload] = useState(null);
